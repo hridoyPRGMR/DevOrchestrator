@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="DevOrchestrator.Api/DevOrchestrator.Api.csproj" />
+  <Project Path="DevOrchestrator.Application/DevOrchestrator.Application.csproj" />
+  <Project Path="DevOrchestrator.Contracts/DevOrchestrator.Contracts.csproj" />
+  <Project Path="DevOrchestrator.Domain/DevOrchestrator.Domain.csproj" />
+  <Project Path="DevOrchestrator.Infrastructure/DevOrchestrator.Infrastructure.csproj" />
+  <Project Path="DevOrchestrator.Shared/DevOrchestrator.Shared.csproj" />
+  <Project Path="DevOrchestrator.Tools/DevOrchestrator.Tools.csproj" />
+</Solution>
