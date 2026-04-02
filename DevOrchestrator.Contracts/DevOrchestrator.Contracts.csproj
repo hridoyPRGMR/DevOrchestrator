@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DevOrchestrator.Domain\DevOrchestrator.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

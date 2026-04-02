@@ -3,13 +3,22 @@ using System;
 namespace DevOrchestrator.Domain.Coworking;
 public sealed class Booking
 {
-    private Booking() { }
-    public required Guid Id { get; init; } = Guid.NewGuid();
-    public required Guid UserId { get; set; }
-    public required Guid WorkspaceId { get; set; }
-    public required DateTimeOffset StartTime { get; set; }
-    public required DateTimeOffset EndTime { get; set; }
-    public required string Status { get; set; } = null!;
+    public Booking(Guid userId, Guid workspaceId, DateTimeOffset startTime, DateTimeOffset endTime, string status)
+    {
+        Id = Guid.NewGuid();
+        UserId = userId;
+        WorkspaceId = workspaceId;
+        StartTime = startTime;
+        EndTime = endTime;
+        Status = status;
+    }
+
+    public Guid Id { get; init; }
+    public Guid UserId { get; set; }
+    public Guid WorkspaceId { get; set; }
+    public DateTimeOffset StartTime { get; set; }
+    public DateTimeOffset EndTime { get; set; }
+    public string Status { get; set; }
 
     public User? User { get; set; }
     public Workspace? Workspace { get; set; }
