@@ -45,45 +45,49 @@ public class GitHubService : IGitHubService
         {
             try
             {
-                var contentPath = path ?? string.Empty;
-                IReadOnlyList<RepositoryContent> result;
-                if (!string.IsNullOrWhiteSpace(branch))
+                // 1. Get the reference for the branch (e.g., "heads/dev" or "heads/main")
+                var branchName = string.IsNullOrWhiteSpace(branch) ? "main" : branch;
+                var reference = await _client.Git.Reference.Get(owner, repo, $"heads/{branchName}");
+
+                // 2. Get the entire tree recursively using the SHA of the branch head
+                // This is one API call that returns the entire file structure
+                var rootSha = reference.Object.Sha;
+                var recursiveTree = await _client.Git.Tree.GetRecursive(owner, repo, rootSha);
+
+                // 3. Filter and Map
+                var query = recursiveTree.Tree.AsEnumerable();
+
+                // If a path is specified (e.g., "src/"), only take files inside that folder
+                if (!string.IsNullOrWhiteSpace(path) && path != "/" && path != "./")
                 {
-                    result = await _client.Repository.Content.GetAllContentsByRef(owner, repo, contentPath, branch);
-                }
-                else
-                {
-                    result = await _client.Repository.Content.GetAllContents(owner, repo, contentPath);
+                    var normalizedPath = path.Trim('/').ToLower();
+                    query = query.Where(item => item.Path.ToLower().StartsWith(normalizedPath + "/"));
                 }
 
-                var files = new List<GitHubFile>();
-                foreach (var item in result)
+                return query.Select(item => new GitHubFile
                 {
-                    files.Add(new GitHubFile
-                    {
-                        Path = item.Path,
-                        Sha = item.Sha,
-                        Size = item.Size,
-                        Type = item.Type.ToString().ToLower(),
-                        LastModified = DateTime.UtcNow
-                    });
-                }
-
-                return files;
+                    Path = item.Path,
+                    Sha = item.Sha,
+                    Size = item.Size,
+                    // TreeType is an enum: Blob = File, Tree = Folder
+                    Type = item.Type == TreeType.Blob ? "file" : "dir",
+                    LastModified = DateTime.UtcNow
+                }).ToList();
             }
-            catch (NotFoundException ex)
+            catch (NotFoundException)
             {
-                _logger.LogWarning(ex, "Repository {Owner}/{Repo} not found", owner, repo);
+                _logger.LogWarning("Repository {Owner}/{Repo} or branch {Branch} not found", owner, repo, branch);
                 return Enumerable.Empty<GitHubFile>();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "GitHub API error fetching files for {Owner}/{Repo}", owner, repo);
+                _logger.LogError(ex, "Error fetching recursive files for {Owner}/{Repo}", owner, repo);
                 return Enumerable.Empty<GitHubFile>();
             }
         });
     }
 
+    
     public async Task<(string Content, string Sha)> FetchFileContentAsync(string owner, string repo, string filePath, string? branch = null)
     {
         return await _retryPolicy.ExecuteAsync(async () =>

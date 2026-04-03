@@ -47,7 +47,7 @@ public class GetGitHubFilesTool : Core.IMcpTool
 
         try
         {
-            var files = await _gitHubApplicationService.GetRepositoryFilesAsync(owner, repo, path, branch);
+            var files = await _gitHubApplicationService.GetRepositoryFilesAsync(owner, repo, path, branch, forceRefresh: false);
 
             var fileList = files
                 .Select(f => new

@@ -27,8 +27,9 @@ public class GitHubSyncService : IGitHubSyncService
     public async Task<IEnumerable<GitHubFile>> GetRepositoryFilesAsync(string owner, string repo, string? path = null, string? branch = null, bool forceRefresh = false)
     {
         var repository = _dbContext.GitHubRepositories
-            .FirstOrDefault(r => r.Owner.Equals(owner, StringComparison.OrdinalIgnoreCase) && r.Name.Equals(repo, StringComparison.OrdinalIgnoreCase));
-
+            .FirstOrDefault(r => r.Owner.ToLower() == owner.ToLower() && 
+                                r.Name.ToLower() == repo.ToLower());
+                                
         // Check Redis cache first
         if (!forceRefresh)
         {
@@ -53,9 +54,12 @@ public class GitHubSyncService : IGitHubSyncService
 
         if (!forceRefresh && repository != null && !isStale)
         {
+            // 1. Normalize the path first to handle nulls/empty consistently
+            var normalizedPath = (path == "/" || string.IsNullOrWhiteSpace(path)) ? "" : path;
+
             var cachedFiles = _dbContext.RepositoryFiles
                 .Where(f => f.RepositoryId == repository.Id)
-                .Where(f => path == null || f.FilePath.StartsWith(path, StringComparison.OrdinalIgnoreCase))
+                .Where(f => string.IsNullOrEmpty(normalizedPath) || f.FilePath.ToLower().StartsWith(normalizedPath.ToLower()))
                 .ToList();
 
             if (cachedFiles.Any())

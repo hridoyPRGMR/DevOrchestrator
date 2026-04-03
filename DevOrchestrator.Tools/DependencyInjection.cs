@@ -17,7 +17,13 @@ public static class DependencyInjection
         services.AddTransient<IMcpTool, GetRepositoryInfoTool>();
         services.AddTransient<IMcpTool, FindSimilarCodeTool>();
         
-        services.AddSingleton<IMcpToolRegistry>(provider =>
+        // services.AddSingleton<IMcpToolRegistry>(provider =>
+        // {
+        //     var tools = provider.GetRequiredService<IEnumerable<IMcpTool>>();
+        //     return new McpToolRegistry(provider, tools);
+        // });
+
+        services.AddScoped<IMcpToolRegistry>(provider =>
         {
             var tools = provider.GetRequiredService<IEnumerable<IMcpTool>>();
             return new McpToolRegistry(provider, tools);
