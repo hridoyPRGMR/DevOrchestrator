@@ -14,6 +14,8 @@ public static class DependencyInjection
         services.AddTransient<IMcpTool, AnalyzeCodeTool>();
         services.AddTransient<IMcpTool, GetGitHubFilesTool>();
         services.AddTransient<IMcpTool, GetGitHubFileContentTool>();
+        services.AddTransient<IMcpTool, GetRepositoryInfoTool>();
+        services.AddTransient<IMcpTool, FindSimilarCodeTool>();
         
         services.AddSingleton<IMcpToolRegistry>(provider =>
         {

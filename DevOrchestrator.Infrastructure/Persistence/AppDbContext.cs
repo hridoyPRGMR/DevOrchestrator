@@ -18,6 +18,8 @@ public sealed class AppDbContext : DbContext
     public DbSet<AiCache> AiCaches { get; set; } = null!;
     public DbSet<GitHubRepository> GitHubRepositories { get; set; } = null!;
     public DbSet<RepositoryFile> RepositoryFiles { get; set; } = null!;
+    public DbSet<RepositoryFileChunk> RepositoryFileChunks { get; set; } = null!;
+    public DbSet<AiUsageLog> AiUsageLogs { get; set; } = null!;
 
     public DbSet<Coworking.User> CoworkingUsers { get; set; } = null!;
     public DbSet<Coworking.Workspace> Workspaces { get; set; } = null!;
@@ -70,6 +72,47 @@ public sealed class AppDbContext : DbContext
 
         modelBuilder.Entity<RepositoryFile>()
             .HasIndex(f => new { f.RepositoryId, f.FilePath })
+            .IsUnique();
+
+        modelBuilder.Entity<RepositoryFile>()
+            .Property(f => f.Embedding)
+            .HasColumnType("real[]")
+            .IsRequired(false);
+
+        modelBuilder.Entity<AiCache>()
+            .HasIndex(a => a.HashKey)
+            .IsUnique();
+
+        modelBuilder.Entity<AiUsageLog>()
+            .HasIndex(a => a.RequestId);
+
+        modelBuilder.Entity<AiUsageLog>()
+            .HasIndex(a => a.RepositoryId);
+
+        // Configure RepositoryFileChunk
+        modelBuilder.Entity<RepositoryFileChunk>()
+            .HasOne(c => c.RepositoryFile)
+            .WithMany()
+            .HasForeignKey(c => c.RepositoryFileId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RepositoryFileChunk>()
+            .HasIndex(c => c.RepositoryId);
+
+        modelBuilder.Entity<RepositoryFileChunk>()
+            .HasIndex(c => new { c.RepositoryId, c.RepositoryFileId });
+
+        modelBuilder.Entity<RepositoryFileChunk>()
+            .Property(c => c.EmbeddingData)
+            .HasColumnType("text")
+            .IsRequired(false);
+
+        modelBuilder.Entity<RepositoryFileChunk>()
+            .Property(c => c.ContentHash)
+            .HasMaxLength(64);
+
+        modelBuilder.Entity<RepositoryFileChunk>()
+            .HasIndex(c => c.ContentHash)
             .IsUnique();
     }
 }

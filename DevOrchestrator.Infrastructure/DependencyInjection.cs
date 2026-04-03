@@ -20,8 +20,18 @@ public static class DependencyInjection
             options.Configuration = configuration["Redis:ConnectionString"] ?? "localhost:6379";
         });
 
+        services.AddHttpClient();
+
         services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<IAiService, AiService>();
+        services.AddScoped<IUsageTracker, UsageTracker>();
+        services.AddScoped<IPricingService, PricingService>();
+        services.AddScoped<IAgentEngine, AgentEngine>();
+        services.AddScoped<IEmbeddingService, EmbeddingService>();
+        services.AddScoped<ICodeChunker, CodeChunker>();
+        services.AddScoped<IOllamaEmbeddingService, OllamaEmbeddingService>();
+        services.AddScoped<IRepositoryFileChunkService, RepositoryFileChunkService>();
+        services.AddScoped<IContextBuilder, ContextBuilder>();
         services.AddScoped<IGitHubService, GitHubService>();
         services.AddScoped<IGitHubSyncService, GitHubSyncService>();
         services.AddScoped<IGitHubCacheService, GitHubCacheService>();

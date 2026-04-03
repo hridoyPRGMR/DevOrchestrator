@@ -25,7 +25,7 @@ This system:
 * Do NOT add authentication (for now)
 * Do NOT tightly couple components
 * Do NOT skip layers (must follow architecture)
-
+* Do Not add or modied migrations Mnually.
 If something is unclear → keep it minimal and extendable.
 
 ---

@@ -27,6 +27,8 @@ public class RepositoryFile
     public long FileSize { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
+    public float[]? Embedding { get; set; }
+    public DateTime? EmbeddingUpdatedAt { get; set; }
 
     public GitHubRepository Repository { get; set; } = null!;
 }
