@@ -17,14 +17,17 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="10.0.5" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.5" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
     <PackageReference Include="Octokit" Version="14.0.0" />
+    <PackageReference Include="Polly" Version="8.4.2" />
     <PackageReference Include="StackExchange.Redis" Version="2.12.8" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="../DevOrchestrator.Domain/DevOrchestrator.Domain.csproj" />
+    <ProjectReference Include="../DevOrchestrator.Tools/DevOrchestrator.Tools.csproj" />
   </ItemGroup>
 
 </Project>

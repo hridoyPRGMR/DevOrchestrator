@@ -41,6 +41,11 @@ ScaffoldingReadMe.txt
 *~
 CodeCoverage/
 
+# Entity Framework Core migrations
+**/Migrations/
+**/*.Designer.cs
+**/*.resx
+
 # MSBuild Binary and Structured Log
 *.binlog
 

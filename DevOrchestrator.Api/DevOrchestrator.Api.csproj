@@ -15,6 +15,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Scalar.AspNetCore" Version="2.13.18" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
     <PackageReference Include="System.Text.Json" Version="10.0.5" />
   </ItemGroup>
 
@@ -22,6 +23,7 @@
     <ProjectReference Include="../DevOrchestrator.Application/DevOrchestrator.Application.csproj"></ProjectReference>
     <ProjectReference Include="../DevOrchestrator.Infrastructure/DevOrchestrator.Infrastructure.csproj"></ProjectReference>
     <ProjectReference Include="../DevOrchestrator.Contracts/DevOrchestrator.Contracts.csproj"></ProjectReference>
+    <ProjectReference Include="../DevOrchestrator.Tools/DevOrchestrator.Tools.csproj"></ProjectReference>
   </ItemGroup>
 
 </Project>

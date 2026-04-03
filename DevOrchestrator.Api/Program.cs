@@ -2,8 +2,13 @@ using DevOrchestrator.Application;
 using DevOrchestrator.Infrastructure;
 using DevOrchestrator.Infrastructure.Persistence;
 using Scalar.AspNetCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Serilog
+builder.Host.UseSerilog((context, config) =>
+    config.ReadFrom.Configuration(context.Configuration));
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
