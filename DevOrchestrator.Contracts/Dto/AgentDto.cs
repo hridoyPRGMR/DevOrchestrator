@@ -1,15 +1,16 @@
 using System.Collections.Generic;
 
-namespace DevOrchestrator.Api.Models;
+namespace DevOrchestrator.Contracts.Dto;
 
-public class AgentQueryRequest
+// Agent API DTOs
+public class AgentQueryRequestDto
 {
     public string? Query { get; set; }
     public AgentContextDto? Context { get; set; }
     public string? SessionId { get; set; }
 }
 
-public class AgentContinueRequest
+public class AgentContinueRequestDto
 {
     public string? Query { get; set; }
     public string? SessionId { get; set; }
@@ -23,7 +24,7 @@ public class AgentContextDto
     public Dictionary<string, object>? CustomData { get; set; }
 }
 
-public class AgentQueryResponse
+public class AgentQueryResponseDto
 {
     public string? Content { get; set; }
     public List<ToolResultDto>? ToolResults { get; set; }
@@ -39,4 +40,18 @@ public class ToolResultDto
     public bool Success { get; set; }
     public long ExecutionTimeMs { get; set; }
     public Dictionary<string, object>? Arguments { get; set; }
+}
+
+// MCP Tool DTOs
+public class McpRequestDto
+{
+    public string? Tool { get; set; }
+    public Dictionary<string, object>? Arguments { get; set; }
+}
+
+public class McpResponseDto
+{
+    public object? Result { get; set; }
+    public bool Success { get; set; }
+    public string? Error { get; set; }
 }

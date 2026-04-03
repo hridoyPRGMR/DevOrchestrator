@@ -1,12 +1,187 @@
 # DevOrchestrator
-# Api UI Endpoint => http://localhost:5112/scalar
 
+A comprehensive AI-powered development assistant built with Clean Architecture, providing intelligent code analysis, semantic search, multi-tool agent orchestration, and cost tracking.
 
+## 🚀 Features
 
+### 🤖 AI Agent System
+- **Natural Language Queries**: Ask questions like "Find bugs in my authentication code"
+- **Multi-Tool Orchestration**: Automatically combines analysis, search, and embedding tools
+- **Contextual Responses**: Repository-aware answers with file-specific insights
+- **Conversation Continuity**: Multi-turn interactions with session management
 
-# Database -> 
-# dotnet ef migrations add Intial --project ..\DevOrchestrator.Infrastructure\DevOrchestrator.Infrastructure.csproj --startup-project .
-# dotnet ef database update --project ..\DevOrchestrator.Infrastructure\DevOrchestrator.Infrastructure.csproj --startup-project .
+### 🔍 Semantic Code Search
+- **Embedding-Based Search**: Find similar code using AI embeddings
+- **Intelligent Chunking**: Language-aware code splitting for optimal search
+- **Repository-Wide Search**: Search across entire codebases semantically
+
+### 📊 Cost & Usage Tracking
+- **Token Accounting**: Precise tracking of AI API usage
+- **Cost Calculation**: Real-time cost monitoring across different models
+- **Usage Analytics**: Comprehensive logging for optimization
+
+### 🛠️ MCP Tool Ecosystem
+- **Modular Tools**: Pluggable tools for different development tasks
+- **Dynamic Execution**: Agent automatically selects appropriate tools
+- **Extensible Framework**: Easy to add new capabilities
+
+## 🏗️ Architecture
+
+Built with Clean Architecture in .NET 10.0:
+
+```
+DevOrchestrator/
+├── Api/                 # REST API endpoints
+├── Application/         # Application services
+├── Domain/             # Core business logic & entities
+├── Infrastructure/     # Data access & external APIs
+├── Tools/              # MCP tools for orchestration
+└── Shared/             # Common utilities
+```
+
+## 🗄️ Technology Stack
+
+- **Backend**: .NET 10.0, C#
+- **Database**: PostgreSQL with pgvector
+- **Cache**: Redis
+- **AI**: OpenAI API + Ollama (local embeddings)
+- **Architecture**: Clean Architecture, Dependency Injection
+- **Logging**: Serilog
+- **Resilience**: Polly policies
+
+## 🚀 Quick Start
+
+### Prerequisites
+- .NET 10.0 SDK
+- PostgreSQL with pgvector extension
+- Redis (optional, for caching)
+- OpenAI API key (optional, falls back to deterministic responses)
+
+### Setup
+1. **Clone and build**:
+   ```bash
+   git clone <repository-url>
+   cd DevOrchestrator
+   dotnet build
+   ```
+
+2. **Database setup**:
+   ```bash
+   # Create migration
+   dotnet ef migrations add Initial --project DevOrchestrator.Infrastructure --startup-project DevOrchestrator.Api
+
+   # Update database
+   dotnet ef database update --project DevOrchestrator.Infrastructure --startup-project DevOrchestrator.Api
+   ```
+
+3. **Configure settings**:
+   - Copy `appsettings.json` and configure your API keys and connection strings
+   - Set OpenAI API key for AI features
+   - Configure PostgreSQL and Redis connections
+
+4. **Run the application**:
+   ```bash
+   dotnet run --project DevOrchestrator.Api
+   ```
+
+## 📡 API Usage
+
+### Agent Queries
+```bash
+# Natural language code analysis
+curl -X POST http://localhost:5000/api/agent/query \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "Analyze this authentication code for security issues",
+    "context": {
+      "filePaths": ["Controllers/AuthController.cs"]
+    }
+  }'
+```
+
+### Direct Tool Execution
+```bash
+# Use MCP tools directly
+curl -X POST http://localhost:5000/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tool": "analyze_code",
+    "arguments": {
+      "code": "public class User { public string Password { get; set; } }"
+    }
+  }'
+```
+
+## 🛠️ Available Tools
+
+- **analyze_code**: AI-powered code analysis and suggestions
+- **search_code**: Text-based code search
+- **get_file**: Retrieve file contents
+- **find_similar_code**: Semantic code search using embeddings
+- **get_repository_info**: Repository metadata and status
+- **get_time**: Current time information
+
+## 📊 Monitoring
+
+- **API Documentation**: Visit `http://localhost:5000/scalar` for OpenAPI docs
+- **Health Checks**: System health monitoring endpoints
+- **Logging**: Structured logs with Serilog
+- **Metrics**: Performance and usage tracking
+
+## 🔧 Development
+
+### Adding New Features
+1. **New Service**: Add interface to Domain, implementation to Infrastructure
+2. **New Tool**: Implement `IMcpTool` in Tools/Implementations
+3. **New API**: Add controller to Api/Controllers
+4. **Database Changes**: Create EF migration and update schema
+
+### Testing
+```bash
+# Run all tests
+dotnet test
+
+# Run with coverage
+dotnet test --collect:"XPlat Code Coverage"
+```
+
+## 📈 Roadmap
+
+- [x] **Phase 1**: Data models and entities
+- [x] **Phase 2**: Embedding services
+- [x] **Phase 3**: Context building and chunking
+- [x] **Phase 4**: Token tracking and cost calculation
+- [x] **Phase 5**: Multi-tool agent orchestration
+- [x] **Phase 6**: API integration and user interface
+- [ ] **Phase 7**: Advanced agent capabilities (conversation memory, multi-agent collaboration)
+- [ ] **Phase 8**: IDE integrations (VS Code, Cursor)
+- [ ] **Phase 9**: Team collaboration features
+- [ ] **Phase 10**: Enterprise deployment and scaling
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+
+**Api UI Endpoint**: http://localhost:5112/scalar
+
+**Database Commands**:
+```bash
+# Create migration
+dotnet ef migrations add MigrationName --project DevOrchestrator.Infrastructure --startup-project DevOrchestrator.Api
+
+# Update database
+dotnet ef database update --project DevOrchestrator.Infrastructure --startup-project DevOrchestrator.Api
+```
 
 
 ### 🔍 **Problem Statement**

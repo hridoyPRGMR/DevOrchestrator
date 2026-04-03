@@ -1,4 +1,4 @@
-using DevOrchestrator.Api.Models;
+using DevOrchestrator.Contracts.Dto;
 using DevOrchestrator.Tools.Core;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,20 +16,44 @@ public class McpController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] McpRequest request)
+    public async Task<IActionResult> Post([FromBody] McpRequestDto request)
     {
         if (request == null || string.IsNullOrWhiteSpace(request.Tool))
         {
-            return BadRequest(new { error = "Tool name is required" });
+            return BadRequest(new McpResponseDto
+            {
+                Success = false,
+                Error = "Tool name is required"
+            });
         }
 
         var tool = _toolRegistry.Get(request.Tool);
         if (tool == null)
         {
-            return NotFound(new { error = $"Tool '{request.Tool}' not found", availableTools = _toolRegistry.GetToolNames() });
+            return NotFound(new McpResponseDto
+            {
+                Success = false,
+                Error = $"Tool '{request.Tool}' not found",
+                Result = new { availableTools = _toolRegistry.GetToolNames() }
+            });
         }
 
-        var result = await tool.ExecuteAsync(request.Arguments ?? new Dictionary<string, object>());
-        return Ok(result);
+        try
+        {
+            var result = await tool.ExecuteAsync(request.Arguments ?? new Dictionary<string, object>());
+            return Ok(new McpResponseDto
+            {
+                Result = result,
+                Success = true
+            });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new McpResponseDto
+            {
+                Success = false,
+                Error = $"Tool execution failed: {ex.Message}"
+            });
+        }
     }
 }
